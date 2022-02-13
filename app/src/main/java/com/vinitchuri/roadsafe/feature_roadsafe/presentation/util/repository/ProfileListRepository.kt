@@ -15,8 +15,8 @@ class ProfileListRepository {
             ),
             ProfileListModel(
                 imageVector = Icons.Default.ModeNight,
-                contentDescription = R.string.night_mode,
-                text = R.string.night_mode
+                contentDescription = R.string.night_light,
+                text = R.string.night_light
             ),
             ProfileListModel(
                 imageVector = Icons.Default.NoAccounts,

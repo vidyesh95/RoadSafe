@@ -8,7 +8,6 @@ plugins {
 
 android {
     compileSdk 32
-    compileSdkPreview 'Tiramisu'
 
     defaultConfig {
         applicationId "com.vinitchuri.roadsafe"
