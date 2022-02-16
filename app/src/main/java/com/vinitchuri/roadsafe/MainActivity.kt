@@ -91,7 +91,7 @@ fun RoadSafeApp() {
         ) { innerPadding ->
             NavHost(
                 navController,
-                startDestination = Screen.MusicScreen.route,
+                startDestination = Screen.HomeScreen.route,
                 Modifier.padding(innerPadding)
             ) {
                 composable(route = Screen.HomeScreen.route) {
