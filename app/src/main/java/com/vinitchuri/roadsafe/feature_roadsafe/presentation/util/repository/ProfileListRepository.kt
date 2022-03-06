@@ -14,14 +14,14 @@ class ProfileListRepository {
                 text = R.string.app_theme
             ),
             ProfileListModel(
-                imageVector = Icons.Default.ModeNight,
-                contentDescription = R.string.night_light,
-                text = R.string.night_light
-            ),
-            ProfileListModel(
                 imageVector = Icons.Default.NoAccounts,
                 contentDescription = R.string.turn_on_incognito,
                 text = R.string.turn_on_incognito
+            ),
+            ProfileListModel(
+                imageVector = Icons.Default.Language,
+                contentDescription = R.string.app_language,
+                text = R.string.app_language
             ),
             ProfileListModel(
                 imageVector = Icons.Default.Settings,

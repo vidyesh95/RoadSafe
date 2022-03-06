@@ -6,14 +6,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.*
@@ -34,9 +37,11 @@ fun MusicScreen() {
     ) {
         if (maxWidth < maxHeight) {
             Surface(color = MaterialTheme.colorScheme.background) {
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                ) {
                     //Banner()
                     MusicScreenLazyColumn()
                 }
@@ -59,10 +64,41 @@ fun MusicScreenLazyColumn() {
             .wrapContentHeight()
     ) {
         item {
+            MusicScreenSearchBar()
+        }
+        item {
             NavButtons()
         }
         item {
             MusicRow()
+        }
+    }
+}
+
+@ExperimentalMaterial3Api
+@Composable
+fun MusicScreenSearchBar() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(all = 16.dp),
+        shape = RoundedCornerShape(percent = 50),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = stringResource(id = R.string.search),
+                modifier = Modifier.padding(all = 16.dp)
+            )
+            Text(text = "Search for music")
         }
     }
 }

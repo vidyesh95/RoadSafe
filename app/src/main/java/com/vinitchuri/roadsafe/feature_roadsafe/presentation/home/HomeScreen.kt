@@ -1,35 +1,39 @@
 package com.vinitchuri.roadsafe.feature_roadsafe.presentation.home
 
-import android.content.ContentValues.TAG
+import android.Manifest
+import android.content.Intent
 import android.content.res.Configuration
-import android.util.Log
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Switch
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Explore
+import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Layers
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.*
-import kotlinx.coroutines.launch
-
-private const val TAG = "MapSampleActivity"
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
+import com.vinitchuri.roadsafe.BuildConfig
+import com.vinitchuri.roadsafe.R
 
 @ExperimentalMaterial3Api
 @ExperimentalPagerApi
+@ExperimentalPermissionsApi
 @Composable
 fun HomeScreen() {
     val pagerState: PagerState = rememberPagerState()
@@ -48,35 +52,9 @@ fun HomeScreen() {
                             .weight(1f),
                         contentAlignment = Alignment.BottomStart
                     ) {
-                        /*GoogleMapView(
-                            modifier = Modifier.matchParentSize(),
-                            onMapLoaded = {
-                                isMapLoaded = true
-                            }
-                        )
-                        if (!isMapLoaded) {
-                            this@Column.AnimatedVisibility(
-                                modifier = Modifier
-                                    .matchParentSize(),
-                                visible = !isMapLoaded,
-                                enter = EnterTransition.None,
-                                exit = fadeOut()
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier
-                                        .background(MaterialTheme.colorScheme.background)
-                                        .wrapContentSize()
-                                )
-                            }
-                        }*/
+                        MapScreenElements()
                     }
-                    Box(
-                        modifier = Modifier
-                            .aspectRatio(16 / 9f)
-                            .background(color = Color.Magenta)
-                    ) {
-
-                    }
+                    CameraScreen()
                 }
             }
         } else {
@@ -94,191 +72,154 @@ fun HomeScreen() {
     }
 }
 
+@ExperimentalMaterial3Api
+@ExperimentalPermissionsApi
 @Composable
 fun CameraScreen() {
     Box(
         modifier = Modifier
             .aspectRatio(16 / 9f)
-            .background(color = Color.Green)
     ) {
-
+        CameraPermission()
     }
 }
 
+@ExperimentalMaterial3Api
+@ExperimentalPermissionsApi
 @Composable
 fun MapScreen() {
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.Blue)
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomStart
     ) {
-
+        MapScreenElements()
     }
 }
 
+@ExperimentalMaterial3Api
+@ExperimentalPermissionsApi
 @Composable
-private fun GoogleMapView(modifier: Modifier, onMapLoaded: () -> Unit) {
-    val singapore = LatLng(1.35, 103.87)
-    // Observing and controlling the camera's state can be done with a CameraPositionState
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(singapore, 11f)
-    }
-
-    var mapProperties by remember {
-        mutableStateOf(MapProperties(mapType = MapType.NORMAL))
-    }
-    var uiSettings by remember { mutableStateOf(MapUiSettings(compassEnabled = false)) }
-    var shouldAnimateZoom by remember { mutableStateOf(true) }
-    var ticker by remember { mutableStateOf(0) }
-
-    GoogleMap(
-        modifier = modifier,
-        cameraPositionState = cameraPositionState,
-        properties = mapProperties,
-        uiSettings = uiSettings,
-        onMapLoaded = onMapLoaded,
-        googleMapOptionsFactory = {
-            GoogleMapOptions().camera(CameraPosition.fromLatLngZoom(singapore, 11f))
-        },
-        onPOIClick = {
-            Log.d(TAG, "POI clicked: ${it.name}")
-        }
-    ) {
-        // Drawing on the map is accomplished with a child-based API
-        Marker(
-            position = singapore,
-            title = "Zoom in has been tapped $ticker times.",
-            onClick = {
-                println("${it.title} was clicked")
-                false
-            }
-        )
-        Circle(
-            center = singapore,
-            fillColor = MaterialTheme.colorScheme.secondary,
-            strokeColor = MaterialTheme.colorScheme.secondaryContainer,
-            radius = 1000.0,
-        )
-    }
-
-    Column {
-        MapTypeControls(onMapTypeClick = {
-            Log.d("GoogleMap", "Selected map type $it")
-            mapProperties = mapProperties.copy(mapType = it)
-        })
-        val coroutineScope = rememberCoroutineScope()
-        ZoomControls(
-            shouldAnimateZoom,
-            uiSettings.zoomControlsEnabled,
-            onZoomOut = {
-                if (shouldAnimateZoom) {
-                    coroutineScope.launch {
-                        cameraPositionState.animate(CameraUpdateFactory.zoomOut())
-                    }
-                } else {
-                    cameraPositionState.move(CameraUpdateFactory.zoomOut())
-                }
-            },
-            onZoomIn = {
-                if (shouldAnimateZoom) {
-                    coroutineScope.launch {
-                        cameraPositionState.animate(CameraUpdateFactory.zoomIn())
-                    }
-                } else {
-                    cameraPositionState.move(CameraUpdateFactory.zoomIn())
-                }
-                ticker++
-            },
-            onCameraAnimationCheckedChange = {
-                shouldAnimateZoom = it
-            },
-            onZoomControlsCheckedChange = {
-                uiSettings = uiSettings.copy(zoomControlsEnabled = it)
-            }
-        )
-        DebugView(cameraPositionState)
-    }
-}
-
-@Composable
-private fun MapTypeControls(
-    onMapTypeClick: (MapType) -> Unit
-) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .horizontalScroll(state = ScrollState(0)),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        MapType.values().forEach {
-            MapTypeButton(type = it) { onMapTypeClick(it) }
-        }
-    }
-}
-
-@Composable
-private fun MapTypeButton(type: MapType, onClick: () -> Unit) {
-    Button(
-        modifier = Modifier.padding(4.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.onPrimary,
-            contentColor = MaterialTheme.colorScheme.primary
-        ),
-        onClick = onClick
-    ) {
-        Text(text = type.toString(), style = MaterialTheme.typography.labelMedium)
-    }
-}
-
-@Composable
-private fun ZoomControls(
-    isCameraAnimationChecked: Boolean,
-    isZoomControlsEnabledChecked: Boolean,
-    onZoomOut: () -> Unit,
-    onZoomIn: () -> Unit,
-    onCameraAnimationCheckedChange: (Boolean) -> Unit,
-    onZoomControlsCheckedChange: (Boolean) -> Unit,
-) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        MapButton("-", onClick = { onZoomOut() })
-        MapButton("+", onClick = { onZoomIn() })
-        Column(verticalArrangement = Arrangement.Center) {
-            Row(horizontalArrangement = Arrangement.Center) {
-                Text(text = "Camera Animations On?")
-                Switch(isCameraAnimationChecked, onCheckedChange = onCameraAnimationCheckedChange)
-            }
-            Row(horizontalArrangement = Arrangement.Center) {
-                Text(text = "Zoom Controls On?")
-                Switch(isZoomControlsEnabledChecked, onCheckedChange = onZoomControlsCheckedChange)
-            }
-        }
-    }
-}
-
-@Composable
-private fun MapButton(text: String, onClick: () -> Unit) {
-    Button(
-        modifier = Modifier.padding(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.onPrimary,
-            contentColor = MaterialTheme.colorScheme.primary
-        ),
-        onClick = onClick
-    ) {
-        Text(text = text, style = MaterialTheme.typography.labelMedium)
-    }
-}
-
-@Composable
-private fun DebugView(cameraPositionState: CameraPositionState) {
+fun MapScreenElements() {
     Column(
-        Modifier
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        horizontalAlignment = Alignment.End
     ) {
-        val moving = if (cameraPositionState.isMoving) "moving" else "not moving"
-        Text(text = "Camera is $moving")
-        Text(text = "Camera position is ${cameraPositionState.position}")
+        SmallFloatingActionButton(
+            onClick = {},
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+            shape = RoundedCornerShape(percent = 50)
+        ) {
+            Icon(imageVector = Icons.Outlined.Layers, contentDescription = "Map type")
+        }
+        SmallFloatingActionButton(
+            onClick = {},
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+            shape = RoundedCornerShape(percent = 50)
+        ) {
+            Icon(imageVector = Icons.Default.Explore, contentDescription = "North")
+        }
+        FloatingActionButton(
+            onClick = {},
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            shape = RoundedCornerShape(percent = 50)
+        ) {
+            Icon(imageVector = Icons.Default.MyLocation, contentDescription = "Location")
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(all = 16.dp),
+            shape = RoundedCornerShape(percent = 50),
+            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = stringResource(id = R.string.search),
+                    modifier = Modifier.padding(all = 16.dp)
+                )
+                Text(text = "Search for destination")
+            }
+        }
+    }
+}
+
+@Composable
+fun CameraUi() {
+    Box(modifier = Modifier.fillMaxSize()) {
+
+    }
+}
+
+@ExperimentalMaterial3Api
+@ExperimentalPermissionsApi
+@Composable
+fun CameraPermission() {
+    /* Camera permission state.*/
+    val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
+
+    val context = LocalContext.current
+    val intent = Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+    )
+
+    when (cameraPermissionState.status) {
+
+        /* If the camera permission is granted, then show screen with the feature enabled.*/
+        PermissionStatus.Granted -> {
+            CameraUi()
+        }
+
+        is PermissionStatus.Denied -> {
+            /*
+            * This is a rationale explaining why we need the camera permission.
+            * We are displaying this because the user has denied the permission once.
+            * */
+            if (cameraPermissionState.status.shouldShowRationale) {
+                /*
+                * If the user has denied the permission but the rationale can be shown, then gently
+                * explain why the app requires this permission
+                * */
+                Column {
+                    Text(text = "The camera is important for this app. Please grant the permission.")
+                    Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                        Text("Grant permission")
+                    }
+                }
+            } else {
+                /*
+                * If it's the first time the user lands on this feature, or the user doesn't want to
+                * be asked again for this permission, explain that the permission is required
+                * */
+                Column {
+                    Text(text = "Camera permission required for this feature to be available. Please grant the permission")
+                    Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                        Text("Grant permission")
+                    }
+
+                    Text(text = "Camera permission denied twice. Please grant the permission. Set allow while using this app or allow all the time according to your requirement.")
+                    Button(
+                        onClick = {
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            context.startActivity(intent)
+                        }
+                    ) {
+                        Text("Open settings to grant permission.")
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -295,6 +236,7 @@ private fun DebugView(cameraPositionState: CameraPositionState) {
 )
 @ExperimentalMaterial3Api
 @ExperimentalPagerApi
+@ExperimentalPermissionsApi
 @Composable
 fun HomeScreenPreview() {
     HomeScreen()

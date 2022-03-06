@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.vinitchuri.roadsafe.feature_roadsafe.presentation.home.HomeScreen
 import com.vinitchuri.roadsafe.feature_roadsafe.presentation.music.MusicScreen
 import com.vinitchuri.roadsafe.feature_roadsafe.presentation.profile.ProfileScreen
@@ -28,12 +29,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalMaterial3Api
 @ExperimentalPagerApi
+@ExperimentalPermissionsApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         installSplashScreen()
+        super.onCreate(savedInstanceState)
         setContent {
             RoadSafeApp()
         }
@@ -42,6 +44,7 @@ class MainActivity : ComponentActivity() {
 
 @ExperimentalMaterial3Api
 @ExperimentalPagerApi
+@ExperimentalPermissionsApi
 @Composable
 fun RoadSafeApp() {
     RoadSafeTheme {
@@ -110,6 +113,7 @@ fun RoadSafeApp() {
 
 @ExperimentalMaterial3Api
 @ExperimentalPagerApi
+@ExperimentalPermissionsApi
 @Preview(
     showBackground = true, name = "Day mode",
     uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
