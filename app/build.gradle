@@ -81,8 +81,12 @@ dependencies {
     implementation "androidx.camera:camera-camera2:$camerax_version"
     // CameraX Lifecycle Library
     implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    // CameraX VideoCapture library
+    implementation "androidx.camera:camera-video:${camerax_version}"
     // CameraX View class
-    implementation 'androidx.camera:camera-view:1.1.0-beta02'
+    implementation "androidx.camera:camera-view:${camerax_version}"
+    // CameraX Extensions library
+    implementation "androidx.camera:camera-extensions:${camerax_version}"
 
     // Coil  image loading library for Android backed by Kotlin Coroutines.
     implementation("io.coil-kt:coil-compose:1.4.0")
@@ -121,7 +125,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
     // debugImplementation because LeakCanary should only run in debug builds.
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

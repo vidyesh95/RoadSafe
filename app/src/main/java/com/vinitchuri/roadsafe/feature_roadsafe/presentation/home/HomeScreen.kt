@@ -5,6 +5,19 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.provider.Settings
+import android.util.Size
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageAnalysis.Analyzer
+import androidx.camera.core.VideoCapture
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.video.FallbackStrategy
+import androidx.camera.video.Quality
+import androidx.camera.video.QualitySelector
+import androidx.camera.video.Recorder
+import androidx.camera.video.VideoCapture.withOutput
+import androidx.camera.view.PreviewView
+import androidx.camera.video.VideoCapture.withOutput
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -14,12 +27,17 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Layers
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -30,6 +48,9 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.vinitchuri.roadsafe.BuildConfig
 import com.vinitchuri.roadsafe.R
+import kotlinx.coroutines.Runnable
+import timber.log.Timber
+import java.util.concurrent.Executor
 
 @ExperimentalMaterial3Api
 @ExperimentalPagerApi
@@ -154,13 +175,6 @@ fun MapScreenElements() {
     }
 }
 
-@Composable
-fun CameraUi() {
-    Box(modifier = Modifier.fillMaxSize()) {
-
-    }
-}
-
 @ExperimentalMaterial3Api
 @ExperimentalPermissionsApi
 @Composable
@@ -178,7 +192,7 @@ fun CameraPermission() {
 
         /* If the camera permission is granted, then show screen with the feature enabled.*/
         PermissionStatus.Granted -> {
-            CameraUi()
+            //CameraPreview()
         }
 
         is PermissionStatus.Denied -> {
