@@ -2,6 +2,7 @@ package com.vinitchuri.roadsafe.feature_roadsafe.presentation.music
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -82,7 +83,8 @@ fun MusicScreenSearchBar() {
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(all = 16.dp),
+            .padding(all = 16.dp)
+            .clickable(onClick = {}),
         shape = RoundedCornerShape(percent = 50),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
@@ -114,7 +116,8 @@ fun MusicRow() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
+                .wrapContentHeight()
+                .clickable(onClick = {}),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -173,48 +176,52 @@ fun NavButtons() {
         Column(
             modifier = Modifier
                 .wrapContentSize()
+                .clickable(onClick = {})
                 .padding(all = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_genre),
-                contentDescription = ""
+                contentDescription = "Genre"
             )
             Text(text = "Genre", modifier = Modifier.padding(top = 4.dp))
         }
         Column(
             modifier = Modifier
                 .wrapContentSize()
+                .clickable(onClick = {})
                 .padding(all = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_new),
-                contentDescription = ""
+                contentDescription = "Daily"
             )
             Text(text = "Daily", modifier = Modifier.padding(top = 4.dp))
         }
         Column(
             modifier = Modifier
                 .wrapContentSize()
+                .clickable(onClick = {})
                 .padding(all = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_favorite),
-                contentDescription = ""
+                contentDescription = "Favorite"
             )
             Text(text = "Favorite", modifier = Modifier.padding(top = 4.dp))
         }
         Column(
             modifier = Modifier
                 .wrapContentSize()
+                .clickable(onClick = {})
                 .padding(all = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_popular),
-                contentDescription = ""
+                contentDescription = "Ranking"
             )
             Text(text = "Ranking", modifier = Modifier.padding(top = 4.dp))
         }

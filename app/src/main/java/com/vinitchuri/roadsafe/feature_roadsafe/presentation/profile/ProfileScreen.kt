@@ -54,7 +54,7 @@ fun ProfileList() {
             NightLight()
         }
         itemsIndexed(items = getAllData) { index, profileListModel ->
-            ProfileListItem(profileListModel = profileListModel,)
+            ProfileListItem(profileListModel = profileListModel)
         }
     }
 }
@@ -96,7 +96,8 @@ fun ProfileCard(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(all = 16.dp),
+            .padding(all = 16.dp)
+            .clickable(onClick = {}),
         shape = RoundedCornerShape(size = 16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
