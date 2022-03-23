@@ -20,7 +20,6 @@ fun MusicScreenPagerItem(musicScreenPagerModel: MusicScreenPagerModel) {
     Card(
         modifier = Modifier
             .fillMaxSize(),
-        interactionSource = null,
         shape = RoundedCornerShape(size = 0.dp),
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
