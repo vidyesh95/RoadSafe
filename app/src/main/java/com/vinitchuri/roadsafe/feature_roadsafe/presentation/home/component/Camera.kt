@@ -1,5 +1,6 @@
 package com.vinitchuri.roadsafe.feature_roadsafe.presentation.home.component
 
+import android.util.Log
 import android.util.Size
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -16,13 +17,12 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import timber.log.Timber
 import java.util.concurrent.Executor
 
 @Composable
 fun CameraPreview(
-    videoCapture: VideoCapture,
-    analyzer: ImageAnalysis.Analyzer
+    /*videoCapture: VideoCapture,
+    analyzer: ImageAnalysis.Analyzer*/
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -41,10 +41,10 @@ fun CameraPreview(
                     bindPreview(
                         lifecycleOwner,
                         previewView,
-                        cameraProvider,
+                        cameraProvider/*,
                         videoCapture,
                         analyzer,
-                        executor,
+                        executor,*/
                     )
                 },
                 executor
@@ -58,10 +58,10 @@ fun CameraPreview(
 private fun bindPreview(
     lifecycleOwner: LifecycleOwner,
     previewView: PreviewView,
-    cameraProvider: ProcessCameraProvider,
+    cameraProvider: ProcessCameraProvider/*,
     videoCapture: VideoCapture,
     analyzer: ImageAnalysis.Analyzer,
-    executor: Executor
+    executor: Executor*/
 ) {
     // Preview
     val preview = Preview
@@ -94,12 +94,12 @@ private fun bindPreview(
         cameraProvider.bindToLifecycle(
             lifecycleOwner,
             cameraSelector,
-            videoCapture,
-            setupImageAnalysis(previewView, executor, analyzer),
+            /*videoCapture,
+            setupImageAnalysis(previewView, executor, analyzer),*/
             preview
         )
     } catch (exc: Exception) {
-        Timber.e(exc, "Use case binding failed")
+        Log.e(exc.toString(), "Use case binding failed")
     }
 }
 

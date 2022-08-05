@@ -1,6 +1,7 @@
 package com.vinitchuri.roadsafe.feature_roadsafe.presentation.music.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -19,9 +20,9 @@ import com.vinitchuri.roadsafe.feature_roadsafe.presentation.util.model.MusicScr
 fun MusicScreenPagerItem(musicScreenPagerModel: MusicScreenPagerModel) {
     Card(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.primaryContainer),
         shape = RoundedCornerShape(size = 0.dp),
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Image(

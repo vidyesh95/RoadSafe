@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.provider.Settings
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -28,8 +29,12 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.*
 import com.vinitchuri.roadsafe.BuildConfig
 import com.vinitchuri.roadsafe.R
+import com.vinitchuri.roadsafe.feature_roadsafe.presentation.home.component.CameraPreview
 
 @ExperimentalMaterial3Api
 @ExperimentalPagerApi
@@ -52,7 +57,7 @@ fun HomeScreen() {
                             .weight(1f),
                         contentAlignment = Alignment.BottomStart
                     ) {
-                        MapScreenElements()
+                        MapScreen()
                     }
                     CameraScreen()
                 }
@@ -93,7 +98,26 @@ fun MapScreen() {
             .fillMaxSize(),
         contentAlignment = Alignment.BottomStart
     ) {
+        Map()
         MapScreenElements()
+    }
+}
+
+@Composable
+fun Map() {
+    val singapore = LatLng(1.35, 103.85)
+    val cameraPositionState: CameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(singapore, 16f)
+    }
+    GoogleMap(
+        modifier = Modifier.fillMaxSize(),
+        cameraPositionState = cameraPositionState
+    ) {
+        Marker(
+            state = MarkerState(position = singapore),
+            title = "Singapore",
+            snippet = "Marker in Singapore"
+        )
     }
 }
 
@@ -139,7 +163,8 @@ fun MapScreenElements() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight(),
+                    .wrapContentHeight()
+                    .clickable(onClick = {}),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -171,7 +196,7 @@ fun CameraPermission() {
 
         /* If the camera permission is granted, then show screen with the feature enabled.*/
         PermissionStatus.Granted -> {
-            //CameraPreview()
+            CameraPreview()
         }
 
         is PermissionStatus.Denied -> {

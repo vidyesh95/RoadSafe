@@ -25,12 +25,10 @@ import com.vinitchuri.roadsafe.feature_roadsafe.presentation.music.MusicScreen
 import com.vinitchuri.roadsafe.feature_roadsafe.presentation.profile.ProfileScreen
 import com.vinitchuri.roadsafe.feature_roadsafe.presentation.util.Screen
 import com.vinitchuri.roadsafe.ui.theme.RoadSafeTheme
-import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalMaterial3Api
 @ExperimentalPagerApi
 @ExperimentalPermissionsApi
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
