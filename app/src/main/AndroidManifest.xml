@@ -40,9 +40,12 @@
             &lt;!&ndash; Any inner elements would go here. &ndash;&gt;
         </service>-->
 
+        <!--<meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
+            android:value="AIzaSyDO1RP-f5Lij3yjx4IzXp0NnrunGlWU_Hs" />
 
         <!--android:name=".feature_roadsafe.presentation.MainActivity"-->
         <activity

@@ -7,7 +7,9 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.MyLocation
@@ -210,8 +212,13 @@ fun CameraPermission() {
                 * explain why the app requires this permission
                 * */
                 Column {
-                    Text(text = "The camera is important for this app. Please grant the permission.")
-                    Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                    Text(
+                        text = "The camera is important for this app. " +
+                                "Please grant the permission."
+                    )
+                    Button(
+                        onClick = { cameraPermissionState.launchPermissionRequest() }
+                    ) {
                         Text("Grant permission")
                     }
                 }
@@ -220,13 +227,29 @@ fun CameraPermission() {
                 * If it's the first time the user lands on this feature, or the user doesn't want to
                 * be asked again for this permission, explain that the permission is required
                 * */
-                Column {
-                    Text(text = "Camera permission required for this feature to be available. Please grant the permission")
-                    Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                Column(
+                    modifier = Modifier
+                        .padding(all = 16.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Text(
+                        text = "Camera permission required for this feature to be available. " +
+                                "Please grant the permission"
+                    )
+                    Button(
+                        onClick = {
+                            cameraPermissionState.launchPermissionRequest()
+                        }
+                    ) {
                         Text("Grant permission")
                     }
 
-                    Text(text = "Camera permission denied twice. Please grant the permission. Set allow while using this app or allow all the time according to your requirement.")
+                    Text(
+                        modifier = Modifier.padding(top = 16.dp),
+                        text = "Camera permission denied twice. Please grant the permission. " +
+                                "Set allow while using this app or allow all the time according " +
+                                "to your requirement."
+                    )
                     Button(
                         onClick = {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -5,7 +5,7 @@ import android.util.Size
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
-import androidx.camera.core.VideoCapture
+import androidx.camera.video.VideoCapture
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.fillMaxSize
@@ -58,10 +58,11 @@ fun CameraPreview(
 private fun bindPreview(
     lifecycleOwner: LifecycleOwner,
     previewView: PreviewView,
-    cameraProvider: ProcessCameraProvider/*,
-    videoCapture: VideoCapture,
-    analyzer: ImageAnalysis.Analyzer,
-    executor: Executor*/
+    cameraProvider: ProcessCameraProvider,
+    /*
+        videoCapture: VideoCapture,
+        analyzer: ImageAnalysis.Analyzer,
+        executor: Executor*/
 ) {
     // Preview
     val preview = Preview

@@ -1,7 +1,7 @@
 package com.vinitchuri.roadsafe.feature_roadsafe.presentation.home.component
 
 import android.provider.MediaStore
-import androidx.camera.core.VideoCapture
+import androidx.camera.video.VideoCapture
 import androidx.camera.video.FallbackStrategy
 import androidx.camera.video.MediaStoreOutputOptions
 import androidx.camera.video.Quality
